@@ -1,0 +1,130 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "comfyui"
+dynamic = ["version"]
+description = 'The most powerful and modular diffusion model GUI and backend.'
+readme = "README.md"
+requires-python = ">=3.9"
+license = "GPL-3.0"
+keywords = []
+maintainer = [
+  { name = "Oleksandr Ostrenko", email = "oleksandr@ostrenko.dev" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "torch",
+  "torchsde",
+  "torchvision",
+  "torchaudio",
+  "einops",
+  "transformers>=4.28.1",
+  "tokenizers>=0.13.3",
+  "sentencepiece",
+  "safetensors>=0.4.2",
+  "aiohttp",
+  "pyyaml",
+  "Pillow",
+  "scipy",
+  "tqdm",
+  "psutil",
+]
+
+[project.urls]
+Home = "https://www.comfy.org"
+Documentation = "https://docs.comfy.org"
+Issues = "https://github.com/comfyanonymous/ComfyUI/issues"
+Source = "https://github.com/comfyanonymous/ComfyUI"
+
+[project.scripts]
+comfyui = "comfyui.main:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.sdist]
+ignore-vcs = true
+exclude = [
+  "/.github",
+  "/.ci",
+  "/notebooks",
+]
+include = [
+  "/extra_model_paths.yaml.example",
+  "/pytest.ini",
+  "/comfyui",
+  "/custom_nodes",
+  "/input",
+  "/models",
+  "/output",
+  "/tests",
+  "/tests-unit",
+  "/web",
+]
+
+[tool.hatch.build.targets.wheel]
+ignore-vcs = true
+packages = ["comfyui"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"custom_nodes"="share/comfyui/custom_nodes"
+"input"="share/comfyui/input"
+"models"="share/comfyui/models"
+"output"="share/comfyui/output"
+"web"="share/comfyui/web"
+
+# [tool.hatch.envs.types]
+# extra-dependencies = [
+#   "mypy>=1.0.0",
+# ]
+#
+# [tool.hatch.envs.types.scripts]
+# check = "mypy --install-types --non-interactive {args:src/comfy_ui tests}"
+
+[tool.hatch.envs.test]
+path = '.venv'
+default-args = ["tests-unit"]
+dependencies = [
+  "coverage[toml]",
+  "pytest>=7.8.0",
+  "pytest-aiohttp",
+  "pytest-asyncio",
+  "pytest-cov",
+  # additional deps
+  "requests",
+  "typing_extensions",
+  "pyyaml"
+]
+
+[tool.hatch.envs.test.scripts]
+cov = 'pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=pkg --cov=tests-unit'
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.11", "3.12"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [ ]
+
+[tool.coverage.paths]
+source = ["comfyui"]
+tests = ["tests-unit"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
