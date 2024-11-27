@@ -5,8 +5,8 @@ from aiohttp import ClientResponse
 import itertools
 import os
 from unittest.mock import AsyncMock, patch, MagicMock
-from model_filemanager import download_model, track_download_progress, create_model_path, check_file_exists, DownloadStatusType, DownloadModelStatus, validate_filename
-import folder_paths
+from comfyui.model_filemanager import download_model, track_download_progress, create_model_path, check_file_exists, DownloadStatusType, DownloadModelStatus, validate_filename
+import comfyui.folder_paths
 
 @pytest.fixture
 def temp_dir():
@@ -62,11 +62,11 @@ async def test_download_model_success(temp_dir):
 
     time_values = itertools.count(0, 0.1)
 
-    fake_paths = {'checkpoints': ([temp_dir], folder_paths.supported_pt_extensions)}
+    fake_paths = {'checkpoints': ([temp_dir], comfyui.folder_paths.supported_pt_extensions)}
 
-    with patch('model_filemanager.create_model_path', return_value=('models/checkpoints/model.sft', 'model.sft')), \
-         patch('model_filemanager.check_file_exists', return_value=None), \
-         patch('folder_paths.folder_names_and_paths', fake_paths), \
+    with patch('comfyui.model_filemanager.create_model_path', return_value=('models/checkpoints/model.sft', 'model.sft')), \
+         patch('comfyui.model_filemanager.check_file_exists', return_value=None), \
+         patch('comfyui.folder_paths.folder_names_and_paths', fake_paths), \
          patch('time.time', side_effect=time_values):  # Simulate time passing
 
         result = await download_model(
@@ -116,12 +116,12 @@ async def test_download_model_url_request_failure(temp_dir):
     mock_get = AsyncMock(return_value=mock_response)
     mock_progress_callback = AsyncMock()
     
-    fake_paths = {'checkpoints': ([temp_dir], folder_paths.supported_pt_extensions)}
+    fake_paths = {'checkpoints': ([temp_dir], comfyui.folder_paths.supported_pt_extensions)}
 
     # Mock the create_model_path function
-    with patch('model_filemanager.create_model_path', return_value='/mock/path/model.safetensors'), \
-         patch('model_filemanager.check_file_exists', return_value=None), \
-         patch('folder_paths.folder_names_and_paths', fake_paths):
+    with patch('comfyui.model_filemanager.create_model_path', return_value='/mock/path/model.safetensors'), \
+         patch('comfyui.model_filemanager.check_file_exists', return_value=None), \
+         patch('comfyui.folder_paths.folder_names_and_paths', fake_paths):
         # Call the function
         result = await download_model(
             mock_get,

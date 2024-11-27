@@ -3,12 +3,12 @@ import pytest
 from requests.exceptions import HTTPError
 from unittest.mock import patch
 
-from app.frontend_management import (
+from comfyui.app.frontend_management import (
     FrontendManager,
     FrontEndProvider,
     Release,
 )
-from comfy.cli_args import DEFAULT_VERSION_STRING
+from comfyui.comfy.cli_args import DEFAULT_VERSION_STRING
 
 
 @pytest.fixture
@@ -73,28 +73,28 @@ def test_init_frontend_default():
     assert frontend_path == FrontendManager.DEFAULT_FRONTEND_PATH
 
 
-def test_init_frontend_invalid_version():
+def test_init_frontend_invalid_version(mock_provider):
     version_string = "test-owner/test-repo@1.100.99"
     with pytest.raises(HTTPError):
-        FrontendManager.init_frontend_unsafe(version_string)
+        FrontendManager.init_frontend_unsafe(version_string, mock_provider)
 
 
-def test_init_frontend_invalid_provider():
+def test_init_frontend_invalid_provider(mock_provider):
     version_string = "invalid/invalid@latest"
     with pytest.raises(HTTPError):
-        FrontendManager.init_frontend_unsafe(version_string)
+        FrontendManager.init_frontend_unsafe(version_string, mock_provider)
 
 @pytest.fixture
 def mock_os_functions():
-    with patch('app.frontend_management.os.makedirs') as mock_makedirs, \
-         patch('app.frontend_management.os.listdir') as mock_listdir, \
-         patch('app.frontend_management.os.rmdir') as mock_rmdir:
+    with patch('comfyui.app.frontend_management.os.makedirs') as mock_makedirs, \
+         patch('comfyui.app.frontend_management.os.listdir') as mock_listdir, \
+         patch('comfyui.app.frontend_management.os.rmdir') as mock_rmdir:
         mock_listdir.return_value = []  # Simulate empty directory
         yield mock_makedirs, mock_listdir, mock_rmdir
 
 @pytest.fixture
 def mock_download():
-    with patch('app.frontend_management.download_release_asset_zip') as mock:
+    with patch('comfyui.app.frontend_management.download_release_asset_zip') as mock:
         mock.side_effect = Exception("Download failed")  # Simulate download failure
         yield mock
 

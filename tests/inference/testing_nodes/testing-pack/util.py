@@ -1,6 +1,8 @@
-from comfy_execution.graph_utils import GraphBuilder
+from comfyui.comfy_execution.graph_utils import GraphBuilder
 from .tools import VariantSupport
 
+
+from .flow_control import NUM_FLOW_SOCKETS
 @VariantSupport()
 class TestAccumulateNode:
     def __init__(self):
@@ -227,9 +229,6 @@ class TestIntMathOperation:
             return (a % b,)
         elif operation == "power":
             return (a ** b,)
-
-
-from .flow_control import NUM_FLOW_SOCKETS
 @VariantSupport()
 class TestForLoopOpen:
     def __init__(self):

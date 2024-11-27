@@ -1,7 +1,7 @@
 import pytest
 import os
 import tempfile
-from folder_paths import filter_files_content_types
+from comfyui.folder_paths import filter_files_content_types
 
 @pytest.fixture(scope="module")
 def file_extensions():

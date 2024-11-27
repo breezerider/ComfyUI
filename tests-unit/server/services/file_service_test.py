@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from api_server.services.file_service import FileService
+from comfyui.api_server.services.file_service import FileService
 
 @pytest.fixture
 def mock_file_system_ops():

@@ -1,9 +1,9 @@
 import pytest
 from aiohttp import web
 from unittest.mock import MagicMock, patch
-from api_server.routes.internal.internal_routes import InternalRoutes
-from api_server.services.file_service import FileService
-from folder_paths import models_dir, user_directory, output_directory
+from comfyui.api_server.routes.internal.internal_routes import InternalRoutes
+from comfyui.api_server.services.file_service import FileService
+from comfyui.folder_paths import models_dir, user_directory, output_directory
 
 
 @pytest.fixture
@@ -98,7 +98,7 @@ async def test_routes_added_to_app(aiohttp_client_factory, internal_routes):
 
 @pytest.mark.asyncio
 async def test_file_service_initialization():
-    with patch('api_server.routes.internal.internal_routes.FileService') as MockFileService:
+    with patch('comfyui.api_server.routes.internal.internal_routes.FileService') as MockFileService:
         # Create a mock instance
         mock_file_service_instance = MagicMock(spec=FileService)
         MockFileService.return_value = mock_file_service_instance

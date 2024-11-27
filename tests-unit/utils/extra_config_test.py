@@ -3,8 +3,8 @@ import yaml
 import os
 from unittest.mock import Mock, patch, mock_open
 
-from utils.extra_config import load_extra_path_config
-import folder_paths
+from comfyui.utils.extra_config import load_extra_path_config
+import comfyui.folder_paths
 
 @pytest.fixture
 def mock_yaml_content():
@@ -63,7 +63,7 @@ def test_load_extra_model_paths_expands_userpath(
     mock_expanded_home
 ):
     # Attach mocks used by load_extra_path_config
-    monkeypatch.setattr(folder_paths, 'add_model_folder_path', mock_add_model_folder_path)
+    monkeypatch.setattr(comfyui.folder_paths, 'add_model_folder_path', mock_add_model_folder_path)
     monkeypatch.setattr(os.path, 'expanduser', mock_expanduser)
     monkeypatch.setattr(yaml, 'safe_load', mock_yaml_safe_load)
 
@@ -101,7 +101,7 @@ def test_load_extra_model_paths_expands_appdata(
     mock_file.return_value.read.return_value = yaml_config_with_appdata
 
     # Attach mocks
-    monkeypatch.setattr(folder_paths, 'add_model_folder_path', mock_add_model_folder_path)
+    monkeypatch.setattr(comfyui.folder_paths, 'add_model_folder_path', mock_add_model_folder_path)
     monkeypatch.setattr(os.path, 'expandvars', mock_expandvars_appdata)
     monkeypatch.setattr(yaml, 'safe_load', Mock(return_value=mock_yaml_content_appdata))
 
