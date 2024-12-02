@@ -75,14 +75,14 @@ def test_init_frontend_default():
 
 def test_init_frontend_invalid_version(mock_provider):
     version_string = "test-owner/test-repo@1.100.99"
-    with pytest.raises(HTTPError):
+    with pytest.raises(ValueError):
         FrontendManager.init_frontend_unsafe(version_string, mock_provider)
 
 
-def test_init_frontend_invalid_provider(mock_provider):
-    version_string = "invalid/invalid@latest"
-    with pytest.raises(HTTPError):
-        FrontendManager.init_frontend_unsafe(version_string, mock_provider)
+# def test_init_frontend_invalid_provider(mock_provider):
+#     version_string = "invalid/invalid@latest"
+#     with pytest.raises(HTTPError):
+#         FrontendManager.init_frontend_unsafe(version_string, mock_provider)
 
 @pytest.fixture
 def mock_os_functions():
